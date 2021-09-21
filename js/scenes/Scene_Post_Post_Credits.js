@@ -90,16 +90,6 @@ function Scene_Post_Post_Credits(){
 		};
 
 	};
-	var text = encodeURIComponent(window.SHARE_TEXT);
-	var url = encodeURIComponent(window.SHARE_URL);
-	_addSocialButton(575, "facebook", function(){
-		var href = "https://www.facebook.com/sharer/sharer.php?u="+url+"&t="+text;
-		window.open(href);
-	});
-	_addSocialButton(610, "twitter", function(){
-		var href = "https://twitter.com/intent/tweet?text="+text+"%20"+url+"&via=ncasenmare";
-		window.open(href);
-	});
 
 	// CURSOR
     var cursor = new Cursor(self);

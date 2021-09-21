@@ -65,6 +65,8 @@ var textStrings = {
 	// (credits0001.png)
 	"createdBy": "created by",
 	"NickyCase": "Nicky Case",
+	"androidPortBy": "android port by",
+	"AozoraDev": "AozoraDev",
 
 	// (credits0002.png)
 	"manyThanks": "many thanks to my playtesters:",

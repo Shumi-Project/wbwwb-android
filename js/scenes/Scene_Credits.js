@@ -1,13 +1,14 @@
 Game.addToManifest({
 
 	credits0001: "sprites/credits/credits0001.png", // nicky case
-	credits0002: "sprites/credits/credits0002.png", // playtesters
-	credits0003: "sprites/credits/credits0003.png", // patreon
+	credits0002: "sprites/credits/credits0002.png", // aozora
+	credits0003: "sprites/credits/credits0003.png", // playtesters
 	credits0004: "sprites/credits/credits0004.png", // patreon
 	credits0005: "sprites/credits/credits0005.png", // patreon
 	credits0006: "sprites/credits/credits0006.png", // patreon
-	credits0007: "sprites/credits/credits0007.png", // and thank...
-	credits0008: "sprites/credits/credits0008.png", // ...YOU!
+	credits0007: "sprites/credits/credits0007.png", // patreon
+	credits0008: "sprites/credits/credits0008.png", // and thank...
+	credits0009: "sprites/credits/credits0009.png", // ...YOU!
 
 });
 
@@ -20,7 +21,7 @@ function Scene_Credits(){
 	var cont = new PIXI.Container();
 	Game.stage.addChild(cont);
 	var c = {};
-	for(var i=1; i<=8; i++){
+	for(var i=1; i<=9; i++){
         c[i] = new PIXI.Container();
         c[i].addChild(MakeSprite("credits000"+i));
         c[i].alpha = 0;
@@ -42,12 +43,26 @@ function Scene_Credits(){
     authorText.y = Game.height / 2 + 29;
     c[1].addChild(authorText);
     
+    var portBy = new PIXI.Text(textStrings["androidPortBy"], {font: "46px Times", fill:"#FFFFFF", align: "left"});
+    portBy.anchor.x = 0.0;
+    portBy.anchor.y = 0.5;
+    portBy.x = Game.width / 2 - 240;
+    portBy.y = Game.height / 2 - 41;
+    c[2].addChild(portBy);
+    
+    var aozora = new PIXI.Text(textStrings["AozoraDev"], {font: "86px Times", fill:"#FFFFFF", align: "left"});
+    aozora.anchor.x = 0.0;
+    aozora.anchor.y = 0.5;
+    aozora.x = Game.width / 2 - 240;
+    aozora.y = Game.height / 2 + 29;
+    c[2].addChild(aozora);
+    
     var playtestersText = new PIXI.Text(textStrings["manyThanks"], {font: "44px Times", fill:"#FFFFFF", align: "right"});
     playtestersText.anchor.x = 1.0;
     playtestersText.anchor.y = 0.5;
     playtestersText.x = Game.width / 2 + 262;
     playtestersText.y = Game.height / 2 - 140;
-    c[2].addChild(playtestersText);
+    c[3].addChild(playtestersText);
     
     // @TODO: Yes, I feel physical pain hacking this in the way I did in the following lines,
     // but I don't know PIXI enough to do this properly... /sl
@@ -57,28 +72,28 @@ function Scene_Credits(){
     supportersText1.anchor.y = 0.5;
     supportersText1.x = 63;
     supportersText1.y = 111;
-    c[3].addChild(supportersText1);
+    c[4].addChild(supportersText1);
     
     var supportersText2 = new PIXI.Text(textStrings["patreonSupporters"], {font: "45px Times", fill:"#FFFFFF", align: "left"});
     supportersText2.anchor.x = 0.0;
     supportersText2.anchor.y = 0.5;
     supportersText2.x = 63;
     supportersText2.y = 111;
-    c[4].addChild(supportersText2);
+    c[5].addChild(supportersText2);
     
     var supportersText3 = new PIXI.Text(textStrings["patreonSupporters"], {font: "45px Times", fill:"#FFFFFF", align: "left"});
     supportersText3.anchor.x = 0.0;
     supportersText3.anchor.y = 0.5;
     supportersText3.x = 63;
     supportersText3.y = 111;
-    c[5].addChild(supportersText3);
+    c[6].addChild(supportersText3);
     
     var supportersText4 = new PIXI.Text(textStrings["patreonSupporters"], {font: "45px Times", fill:"#FFFFFF", align: "left"});
     supportersText4.anchor.x = 0.0;
     supportersText4.anchor.y = 0.5;
     supportersText4.x = 63;
     supportersText4.y = 111;
-    c[6].addChild(supportersText4);
+    c[7].addChild(supportersText4);
     
     // thankYouText comes before finallyText so finallyText can be aligned based on thankYouText. /sl
     var thankYouText = new PIXI.Text(textStrings["thankYouForPlaying"], {font: "55px Times", fill:"#FFFFFF", align: "center"});
@@ -86,14 +101,14 @@ function Scene_Credits(){
     thankYouText.anchor.y = 0.5;
     thankYouText.x = Game.width / 2 + 10;
     thankYouText.y = Game.height / 2 + 25;
-    c[8].addChild(thankYouText);
+    c[9].addChild(thankYouText);
     
     var finallyText = new PIXI.Text(textStrings["lastButNotLeast"], {font: "37px Times", fill:"#FFFFFF", align: "left"});
     finallyText.anchor.x = 0.0;
     finallyText.anchor.y = 0.5;
     finallyText.x = thankYouText.getBounds().x;
     finallyText.y = Game.height / 2 - 30;
-    c[7].addChild(finallyText);
+    c[8].addChild(finallyText);
     
 	// TWEEN ANIM
 	Tween_get(c[1]).wait(_s(BEAT*4)) // 0. Wait 4 beats before credits...
@@ -101,51 +116,58 @@ function Scene_Credits(){
 	.wait(_s(BEAT*3))
 	.to({alpha:0}, _s(BEAT), Ease.quadInOut)
 	.call(function(){
+	
+	    // (still) 1. AOZORA TIME!
+	    Tween_get(c[2])
+		.to({alpha:1}, _s(BEAT), Ease.quadInOut)
+		.wait(_s(BEAT*3))
+		.to({alpha:0}, _s(BEAT), Ease.quadInOut)
+		.call(function(){
 
 		// 2. PLAYTESTERS
-		Tween_get(c[2])
+		Tween_get(c[3])
 		.to({alpha:1}, _s(BEAT), Ease.quadInOut)
 		.wait(_s(BEAT*3))
 		.to({alpha:0}, _s(BEAT), Ease.quadInOut)
 		.call(function(){
 
 			// 3. PATREONS: CUT BETWEEN THEM THEN FADE OUT
-			Tween_get(c[3])
+			Tween_get(c[4])
 			.to({alpha:1}, _s(BEAT), Ease.quadInOut)
 			.wait(_s(BEAT*2))
 			.call(function(){
 
 				// CUT!
-				c[3].alpha = 0;
-				c[4].alpha = 1;
+				c[4].alpha = 0;
+				c[5].alpha = 1;
 
-				Tween_get(c[4])
+				Tween_get(c[5])
 				.wait(_s(BEAT*2))
 				.call(function(){
 
 					// CUT!
-					c[4].alpha = 0;
-					c[5].alpha = 1;
+					c[5].alpha = 0;
+					c[6].alpha = 1;
 
-					Tween_get(c[5])
+					Tween_get(c[6])
 					.wait(_s(BEAT*2))
 					.call(function(){
 
 						// CUT!
-						c[5].alpha = 0;
-						c[6].alpha = 1;
+						c[6].alpha = 0;
+						c[7].alpha = 1;
 
-						Tween_get(c[6])
+						Tween_get(c[7])
 						.wait(_s(BEAT*2))
 						.to({alpha:0}, _s(BEAT), Ease.quadInOut) // fade...
 						.call(function(){
 
 							// 4. And finally... thank YOU!
-							Tween_get(c[7])
+							Tween_get(c[8])
 							.to({alpha:1}, _s(BEAT), Ease.quadInOut)
 							.wait(_s(BEAT))
 							.call(function(){
-								Tween_get(c[8])
+								Tween_get(c[9])
 								.to({alpha:1}, _s(BEAT), Ease.quadInOut)
 								.wait(_s(BEAT*3))
 								.call(function(){
@@ -176,5 +198,7 @@ function Scene_Credits(){
 		});
 
 	});
+	
+  });
 
 }
