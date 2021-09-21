@@ -60,13 +60,7 @@ function Scene_Post_Post_Credits(){
 		};
 
 	};
-	_addButton(250, 2, function(){
-		window.open("http://ncase.me");
-	});
-	_addButton(480, 3, function(){
-		window.open("https://www.patreon.com/ncase");
-	});
-	_addButton(710, 4, function(){
+	_addButton(480, 4, function(){
 		Game.sceneManager.gotoScene("Quote");
 	});
 
