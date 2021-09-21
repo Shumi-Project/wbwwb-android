@@ -1,4 +1,4 @@
-This is the english version of the [ncase/wbwwb](https://github.com/ncase/wbwwb) fork with some modification.
+This is the english version of the [ncase/wbwwb](https://github.com/ncase/wbwwb) fork with some modification for android.
 \
 \
 ![](https://img.itch.zone/aW1hZ2UvOTIxMTUvNDM0OTExLnBuZw==/original/GkCZT7.png)
