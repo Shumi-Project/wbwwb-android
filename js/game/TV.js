@@ -9,7 +9,8 @@ Game.addToManifest({
 	tv: "sprites/tv.png",
 	chyron: "sprites/chyron.png",
 	chyron2: "sprites/chyron2.png",
-	chyron3: "sprites/chyron3.png"
+	chyron3: "sprites/chyron3.png",
+	chyron3_id: "sprites/chyron3_id.png"
 });
 
 function TV(scene){
@@ -83,7 +84,11 @@ function TV(scene){
 
 		// Chyron BG
 		var resourceName;
-		if(options.nothing) resourceName="chyron3";
+		if(options.nothing) {
+		  var lang = window.LANG;
+		  if (lang === "ID") resourceName="chyron3_id";
+		  else resourceName="chyron3";
+		 }
 		else if(options.fail) resourceName="chyron2";
 		else resourceName="chyron";
 		var bg = new MakeSprite(resourceName);

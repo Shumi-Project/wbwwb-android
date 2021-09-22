@@ -10,7 +10,7 @@ Game.addToManifest({
 	cam_frame: "sprites/cam/cam.png",
 	cam_flash: "sprites/cam/cam-flash.png",
 	cam_instructions: "sprites/cam/cam-instructions.png",
-
+	cam_instructions_id: "sprites/cam/cam-instructions_id.png",
 	cam_snap: "sounds/cam_snap.mp3"
 
 });
@@ -60,7 +60,12 @@ function Camera(scene, options){
     self.graphics.addChild(self.frame);
 
 	if(!options.noIntro){
-	    self.instructions = new PIXI.Sprite(resources.cam_instructions.texture);
+	    var lang = window.LANG;
+	    if (lang === "ID") {
+	      self.instructions = new PIXI.Sprite(resources.cam_instructions_id.texture);
+	    } else {
+	      self.instructions = new PIXI.Sprite(resources.cam_instructions.texture);
+	    }
 		self.instructions.scale.x = self.instructions.scale.y = 0.5;
 	    self.instructions.anchor.x = 0.5;
 	    self.instructions.anchor.y = 0;
