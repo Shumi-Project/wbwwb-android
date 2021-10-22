@@ -29,5 +29,5 @@ jobs:
       with:
         name: wbwwb-android
         path: |
-            ./app/build/outputs/apk/release/wbwwb-android-release.apk
+            ./app/build/outputs/apk/release/wbwwb-android.apk
             ./app/build/outputs/apk/release/output-metadata.json
