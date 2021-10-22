@@ -1,4 +1,4 @@
-name: Android CI
+name: Build
 
 on:
   push:
@@ -24,3 +24,10 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew assembleRelease
+    - name: Store generated apk file
+      uses: actions/upload-artifact@v2
+      with:
+        name: wbwwb-android
+        path: |
+            ./app/build/outputs/apk/release/wbwwb-android-release.apk
+            ./app/build/outputs/apk/release/output-metadata.json
