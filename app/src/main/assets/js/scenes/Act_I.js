@@ -1,30 +1,24 @@
 /*****************************
-
 ACT I: THE SETUP
 1. Hat guy
 2. Lovers
 // then let's start escalating...
-
 ******************************/
 
-function Stage_Start(self){
-
+function Stage_Start(self) {
     // Create Peeps
     self.world.clearPeeps();
     self.world.addBalancedPeeps(20);
-
 }
 
-function Stage_Hat(self){
-
+function Stage_Hat(self) {
 	// A Hat Guy
 	var hat = new HatPeep(self);
     self.world.addPeep(hat);
 
     // Director
     self.director.callbacks = {
-        takePhoto: function(d){
-
+        takePhoto: function(d) {
             // DECLARATIVE
             d.tryChyron(function(d){
                 var p = d.photoData;
@@ -39,13 +33,11 @@ function Stage_Hat(self){
                 }
                 return false;
             }).otherwise(_chyPeeps);
-
         },
-        movePhoto: function(d){
+        movePhoto: function(d) {
             d.audience_movePhoto();
         },
-        cutToTV: function(d){
-
+        cutToTV: function(d) {
             // If you did indeed catch a hat peep...
             var p = d.photoData;
             if(p.caughtHat){

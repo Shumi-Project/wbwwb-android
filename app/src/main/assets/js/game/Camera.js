@@ -1,12 +1,4 @@
-/**************************************
-
-CAMERA:
-The graphics & controls for this sucka
-
-**************************************/
-
 Game.addToManifest({
-
 	cam_frame: "sprites/cam/cam.png",
 	cam_flash: "sprites/cam/cam-flash.png",
 	cam_instructions: "sprites/cam/cam-instructions.png",
@@ -15,26 +7,19 @@ Game.addToManifest({
 
 });
 
-Camera.WIDTH = Game.width/4;
-Camera.HEIGHT = Game.height/4;
+Camera.WIDTH = Game.width / 4;
+Camera.HEIGHT = Game.height / 4;
 
-function Camera(scene, options){
-
+function Camera (scene, options) {
 	var self = this;
 	options = options || {};
 
 	// Properties
 	self.scene = scene;
-    self.x = Game.width/2;
-    self.y = Game.height/2;
+    self.x = Game.width / 2;
+    self.y = Game.height / 2;
 	self.width = Camera.WIDTH;
 	self.height = Camera.HEIGHT;
-
-
-
-	////////////////////////////////
-	///// GRAPHICS /////////////////
-	////////////////////////////////
 
 	// MAIN CONTAINER
 	self.graphics = new PIXI.Container();
@@ -46,7 +31,7 @@ function Camera(scene, options){
 	self.photoTexture = null;
 
 	// FLASH, FRAME, INSTRUCTIONS
-	var resources = PIXI.loader.resources;
+	var resources = PIXI.Loader.shared.resources;
 	
 	self.flash = new PIXI.Sprite(resources.cam_flash.texture);
 	self.flash.scale.x = self.flash.scale.y = 0.5;
@@ -59,12 +44,12 @@ function Camera(scene, options){
     self.frame.anchor.x = self.frame.anchor.y = 0.5;
     self.graphics.addChild(self.frame);
 
-	if(!options.noIntro){
+	if (!options.noIntro) {
 	    var lang = window.LANG;
 	    if (lang === "ID") {
-	      self.instructions = new PIXI.Sprite(resources.cam_instructions_id.texture);
+	      	self.instructions = new PIXI.Sprite(resources.cam_instructions_id.texture);
 	    } else {
-	      self.instructions = new PIXI.Sprite(resources.cam_instructions.texture);
+	    	self.instructions = new PIXI.Sprite(resources.cam_instructions.texture);
 	    }
 		self.instructions.scale.x = self.instructions.scale.y = 0.5;
 	    self.instructions.anchor.x = 0.5;
@@ -77,20 +62,14 @@ function Camera(scene, options){
 	    	.to({alpha:1}, _s(BEAT*0.5));
 	}
 
-
-	////////////////////////////////
-	///// CONTROLS /////////////////
-	////////////////////////////////
-
     // Controls!
     self.frozen = false;
-    Game.stage.mousemove = Game.stage.touchstart = Game.stage.touchmove = function(mouseData){
+    Game.stage.mousemove = Game.stage.touchstart = Game.stage.touchmove = function (mouseData) {
 	    var pos = mouseData.data.global;
 	    self.x = pos.x;
 	    self.y = pos.y;
 	};
-	Game.stage.mousedown = Game.stage.touchend = function(mouseData){
-
+	Game.stage.mousedown = Game.stage.touchend = function (mouseData) {
 		// ONLY ONCE. FREEZE.
 		if(self.frozen) return;
 		if(!options.streaming){
@@ -108,21 +87,12 @@ function Camera(scene, options){
 		// SOUND!
 		if(self.noSounds) return;
 		Game.sounds.cam_snap.play();
-
 	};
-	Game.stage.mouseup = function(mouseData){}; // nothing at all
-
-
-
-	/////////////////////////////////////
-	///// PHOTO - TAKE, HIDE, RESET /////
-	/////////////////////////////////////
+	Game.stage.mouseup = function (mouseData) {}; // nothing at all
 
 	// Take Photo!
-	self.takePhoto = function(){
-
+	self.takePhoto = function () {
 		if(!options.streaming){
-
 			// Just update that...
 			self.updatePosition();
 
@@ -134,7 +104,6 @@ function Camera(scene, options){
 		    photo.anchor.x = photo.anchor.y = 0.5;
 		    self.photo.removeChildren();
 		    self.photo.addChild(photo);
-
 		}
 
 	    // Flash!
@@ -142,15 +111,15 @@ function Camera(scene, options){
 		Tween_get(self.flash).to({alpha:0}, _s(0.25));
 
 		// Fade out instructions...
-		if(!options.noIntro){
+		if (!options.noIntro) {
 			var instr = self.instructions;
-			if(instr.alpha>0){
+			if (instr.alpha>0) {
 				Tween_get(instr).to({alpha:0}, _s(BEAT*0.25));
 	    	}
 	    }
 
 	    // Callback?
-	    if(options.onTakePhoto){
+	    if (options.onTakePhoto) {
 	    	options.onTakePhoto();
 	    }
 
@@ -159,11 +128,11 @@ function Camera(scene, options){
 	// Get texture!
 	var renderTexturePoolIndex = 0;
 	var renderTexturePool = [
-		new PIXI.RenderTexture(Game.renderer, self.width, self.height),
-		new PIXI.RenderTexture(Game.renderer, self.width, self.height)
+		PIXI.RenderTexture.create({ width: self.width, height: self.height }),
+		PIXI.RenderTexture.create({ width: self.width, height: self.height })
 	];
-	self.getTexture = function(){
 
+	self.getTexture = function() {
 		// TAKE THE TEXTURE!
 	    var sw = self.width;
 	    var sh = self.height;
@@ -176,8 +145,8 @@ function Camera(scene, options){
 	    matrix.translate(-sx,-sy);
 
 	    var renderTexture = renderTexturePool[renderTexturePoolIndex];
-	    renderTexture.render(scene.world.graphics, matrix); // TO DO: higher rez
-	    renderTexturePoolIndex = (renderTexturePoolIndex+1)%renderTexturePool.length;
+	    Game.renderer.render(scene.world.graphics, { renderTexture: renderTexture, transform: matrix }); // TO DO: higher rez
+	    renderTexturePoolIndex = (renderTexturePoolIndex + 1) % renderTexturePool.length;
 
 	    // Return texture!
 	    return renderTexture;
@@ -185,7 +154,7 @@ function Camera(scene, options){
 	};
 
 	// Hide Camera
-	self.hide = function(){
+	self.hide = function () {
 		self.graphics.visible = false;
 		self.photo.removeChildren();
 	};

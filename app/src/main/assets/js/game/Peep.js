@@ -1,12 +1,4 @@
-/**************************************
-
-PEEP:
-Walks around.
-
-**************************************/
-
-function Peep(scene){
-
+function Peep (scene) {
 	var self = this;
 	self._CLASS_ = "Peep";
 
@@ -30,7 +22,6 @@ function Peep(scene){
     self.graphics = g;
 
     // Hop! And bounce INDEPENDENT of anim. Bouncy math!
-    
     self.hop = Math.random();
     self._lastHop = self.hop;
 
@@ -50,18 +41,13 @@ function Peep(scene){
     self.goThroughSpots = false;
     //self.allowToStay = false;
 
-	self.update = function(){
-
-		/////////////
-		// WALKING //
-		/////////////
-
+	self.update = function () {
 		// Walk velocity
 		var vx, vy;
-    	if(self.isWalking){
+    	if (self.isWalking) {
 			var vx = Math.cos(self.direction)*self.speed;
 			var vy = Math.sin(self.direction)*self.speed;
-		}else{
+		} else {
 			vx = vy = 0; // stand still
 		}
 
@@ -72,29 +58,24 @@ function Peep(scene){
 		self.y += self.vel.y;
 
 		// Borders
-		if(self.loop){
+		if (self.loop) {
 			var margin = 50;
-			if(self.x<-margin) self.x=Game.width+margin;
-			if(self.x>Game.width+margin) self.x=-margin;
-			if(self.y<0) self.y=Game.height+margin*2;
-			if(self.y>Game.height+margin*2) self.y=0;
+			if (self.x<-margin) self.x = Game.width + margin;
+			if (self.x>Game.width+margin) self.x=-margin;
+			if (self.y<0) self.y=Game.height+margin*2;
+			if (self.y>Game.height+margin*2) self.y=0;
 		}
 
-		////////////////////
-		// AVOIDING SPOTS //
-		////////////////////
-
-		if(scene.avoidSpots && !self.goThroughSpots){
+		// Avoiding Spots
+		if (scene.avoidSpots && !self.goThroughSpots) {
 			var avoid = scene.avoidSpots;
-			avoid.forEach(function(spot){
-
+			avoid.forEach(function(spot) {
 				var dx = spot.x-self.x;
 				var dy = spot.y-self.y;
 				
-				if(dx*dx+dy*dy < spot.radius*spot.radius){
+				if (dx*dx+dy*dy < spot.radius*spot.radius) {
 					self.direction = Math.atan2(dy,dx)+Math.PI; // insta-walk AWAY.
 				}
-
 			});
 		}
 
@@ -116,15 +97,12 @@ function Peep(scene){
 			}
 		}*/
 
-		/////////////////////
-		// ANIMATION QUEUE //
-		/////////////////////
-
-		if(!(self.pauseAnimsWhenNotWatching && self.scene.director.isWatchingTV)){ // HACK
-			for(var i=0;i<self.animCalls.length;i++){
+		// Animmation queue
+		if (!(self.pauseAnimsWhenNotWatching && self.scene.director.isWatchingTV)) {
+			for (var i=0;i<self.animCalls.length;i++) {
 				var animCall = self.animCalls[i];
 				animCall.ticks--;
-				if(animCall.ticks<=0){
+				if (animCall.ticks<=0) {
 					animCall.callback(self);
 					// Splice & go back one
 					self.animCalls.splice(i,1);
@@ -133,18 +111,15 @@ function Peep(scene){
 			}
 		}
 
-		//////////////
-		// GRAPHICS //
-		//////////////
-
+		//Graphics
 		// Position
 		g.x = self.x;
     	g.y = self.y;
 
     	// Walking
-    	if(self.isWalking){
+    	if (self.isWalking) {
     		self.walkAnim();
-    	}else{
+    	} else {
     		self.standAnim();
     	}
 
@@ -158,20 +133,15 @@ function Peep(scene){
 		// Hop
 		self._lastHop = self.hop;
 
-		///////////////////
-		// END: CALLBACK //
-		///////////////////
-
+		// Update
 		self.callback("update");
-
 	};
 
 	// Can be overridden
-	self.walkAnim = function(){
-
+	self.walkAnim = function () {
 		// Hop & Flip
 		self.hop += self.speed/40;
-		if(self.hop>1) self.hop--;
+		if (self.hop>1) self.hop--;
 		self.flip = (self.vel.x<0) ? -1 : 1;
 
 		// Sway back & forth
@@ -182,22 +152,16 @@ function Peep(scene){
     	// Squash at the bottom of your cycle
     	if(self._lastHop<0.5 && self.hop>=0.5) self.bounce = 1.2;
     	if(self._lastHop>0.9 && self.hop<=0.1) self.bounce = 1.2;
-
 	};
 
 	// Can be overridden
-	self.standAnim = function(){
+	self.standAnim = function () {
 		g.rotation = 0;
     	g.pivot.y = 0;
 	};
 
-
-	////////////////////
-	// ACTION HELPERS //
-	////////////////////
-
-	self.touchingPeeps = function(radius, filterFunc, oneSided){
-
+	// Action Helper
+	self.touchingPeeps = function (radius, filterFunc, oneSided) {
 		// Close to
 		var touching = [];
 		var peeps = scene.world.peeps;
@@ -207,25 +171,22 @@ function Peep(scene){
             var dx = other.x-self.x;
             var dy = (other.y-self.y)*2; // height is half of width, w/e
             var dist = dx*dx+dy*dy;
-            if(dist<radius*radius){
-
+            if (dist<radius*radius) {
             	// One Sided?
-            	if(oneSided){
+            	if (oneSided) {
             		if(self.flip>0 && other.x>self.x) touching.push(other);
             		if(self.flip<0 && other.x<self.x) touching.push(other);
-            	}else{
+            	} else {
             		touching.push(other);
             	}
-
             }
         }
 
-		// Filter?...
-		if(filterFunc){
+		// Filter
+		if (filterFunc) {
 			touching = touching.filter(filterFunc);
 		}
         return touching;
-
 	};
 
 	self.stayWithinRect = function(rect, turn){
@@ -242,23 +203,19 @@ function Peep(scene){
 		if(self.y<rect.b && self.vel.y<0) self.direction += turn;
 	};*/
 
-	/////////////////////////////
-	// SPRITE ANIMATION SHTUFF //
-	/////////////////////////////
-
+	// Sprite Animation Stuff
 	self.animCalls = [];
-	self.setTimeout = function(callback,ticks){
+	self.setTimeout = function (callback,ticks) {
 		self.animCalls.push({
 			callback: callback,
 			ticks: ticks
 		});
 	};
-	self.clearAnims = function(){
+	self.clearAnims = function () {
 		self.animCalls = [];
 	};
 
-	self.addMovieClip = function(resourceName){
-
+	self.addMovieClip = function(resourceName) {
 		// Make it!
 		var mc = MakeMovieClip(resourceName);
 		mc.scale.x = mc.scale.y = self.DRAWING_SCALE;
@@ -266,39 +223,25 @@ function Peep(scene){
 
 		// Return
 		return mc;
-
 	};
 
-
-
-	///////////////////////////////////////////
-	// THINGS THE DIRECTOR CAN TELL ME TO DO //
-	///////////////////////////////////////////
-
-	self.startWalking = function(){
-
+	// THINGS THE DIRECTOR CAN TELL ME TO DO
+	self.startWalking = function() {
 		self.isWalking = true;
 		self.speed = 1 + Math.random()*0.5;
     	self.direction = Math.random()*Math.PI*2;
 
     	// CALLBACK
 		self.callback("startWalking");
-
 	};
 	self.startWalking();
 	self.stopWalking = function(halt){
-		if(halt){
+		if (halt) {
 			self.vel.x = self.vel.y = 0; // so not even sliding.
 		}
 		self.isWalking = false;
 		self.hop = 0;
 	};
-
-
-
-	/////////////
-	// THE END //
-	/////////////
 
 	// KILL ME
 	self.kill = function(){
@@ -310,6 +253,4 @@ function Peep(scene){
 
 	// Update!
 	self.update();
-
-
 }

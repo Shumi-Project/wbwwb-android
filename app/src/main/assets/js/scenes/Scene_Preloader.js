@@ -4,8 +4,7 @@ Game.addToManifest({
 	preload_play: "sprites/misc/preload_play.json"
 }, true);
 
-function Scene_Preloader(){
-	
+function Scene_Preloader() {
 	var self = this;
 	Scene.call(self);
 
@@ -15,8 +14,8 @@ function Scene_Preloader(){
 	// RECURSIVE SCREEN
 	var renderTexturePoolIndex = 0;
 	var renderTexturePool = [
-		new PIXI.RenderTexture(Game.renderer, Game.width, Game.height),
-		new PIXI.RenderTexture(Game.renderer, Game.width, Game.height)
+		PIXI.RenderTexture.create({ width: Game.width, height: Game.height }),
+		PIXI.RenderTexture.create({ width: Game.width, height: Game.height })
 	];
 	self.stream = new PIXI.Sprite();
 	self.stream.x = 722;
@@ -38,7 +37,7 @@ function Scene_Preloader(){
 	var barEase = 0.9;
 
 	// Loading text
-	var text = new PIXI.Text("loading... 0%", {font:"25px Poppins", fill:"#4C4C4C", align:"center"});
+	var text = new PIXI.Text("loading... 0%", { fontFamily: "Poppins", fontSize: 25, fill:"#4C4C4C", align:"center"});
     text.anchor.x = 0.5;
     text.anchor.y = 0.5;
     text.x = bar.x;
@@ -46,7 +45,7 @@ function Scene_Preloader(){
     Game.stage.addChild(text);
     
     // Playing time text
-    var playingTimeText = new PIXI.Text(textStrings["playingTime"], { font: "32px Poppins", fill: "#FFFFFF", align: "center" });
+    var playingTimeText = new PIXI.Text(textStrings["playingTime"], { fontFamily: "Poppins", fontSize: 32, fill: "#FFFFFF", align: "center" });
     playingTimeText.anchor.x = 0.5;
     playingTimeText.anchor.y = 0.5;
     playingTimeText.x = bar.x;
@@ -54,23 +53,27 @@ function Scene_Preloader(){
     Game.stage.addChild(playingTimeText);
     
     // Warning text
-    var warningText = new PIXI.Text(textStrings["warning"], { font: "25px Poppins", fill: "#666666", align: "center" });
+    var warningText = new PIXI.Text(textStrings["warning"], { fontFamily: "Poppins", fontSize: 25, fill: "#666666", align: "center" });
     warningText.anchor.x = 0.5;
     warningText.anchor.y = 0.5;
     warningText.x = bar.x;
     warningText.y = 422;
     Game.stage.addChild(warningText);
-    
+
+    // Version
+    var versionText = new PIXI.Text("v2.0", { fontFamily: "Poppins", fontSize: 20, fill: "#FFFFFF", align: "center" });
+    versionText.x = Game.width - 40;
+    Game.stage.addChild(versionText);
+
     // CURSOR
     var cursor = new Cursor(self);
     Game.stage.addChild(cursor.graphics);
 
 	// Update!
-	self.update = function(){
-
+	self.update = function() {
 		// RECURSIVE SCREEN
 		var renderTexture = renderTexturePool[renderTexturePoolIndex];
-	    renderTexture.render(Game.stage);
+	    Game.renderer.render(Game.stage, { renderTexture });
 	    renderTexturePoolIndex = (renderTexturePoolIndex+1)%renderTexturePool.length;
 	    self.stream.texture = renderTexture;
 
@@ -82,34 +85,30 @@ function Scene_Preloader(){
 
 	    // Ya
 	    cursor.update((bar.currentFrame==2));
-
 	};
 
-	Game.loadAssets(function(){
-
+	Game.loadAssets(function() {
 		Game.stage.removeChild(text);
 		bar.gotoAndStop(1);
 		bar.scale.x = bar.scale.y = 1.1;
 
 		// INTERACTIVITY!
 		bar.interactive = true;
-		bar.mouseover = function(){
+		bar.mouseover = function() {
 			barEase = 0.5;
 			bar.gotoAndStop(2);
 		};
-		bar.mouseout = function(){
+		bar.mouseout = function() {
 			bar.gotoAndStop(1);
 		};
-		bar.mousedown = bar.touchend = function(){
+		bar.mousedown = bar.touchend = function() {
 			Game.sounds.squeak.play();
 			setTimeout(function(){
 				Game.sceneManager.gotoScene("Quote");
 			},200);
 		};
-
-	}, function(ratio){
+	}, function(ratio) {
 		var percent = Math.floor(ratio*100);
 		text.text = "loading... "+percent+"%";
 	}, false);
-
 }

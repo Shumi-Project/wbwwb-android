@@ -4,7 +4,6 @@ Game.addToManifest({
 });
 
 /************************************
-
 THE GAME SCENE. THE BIG 'UN.
 
 ACT I - Teaching controls, showing main feedback loop
@@ -14,11 +13,9 @@ ACT IV - MURDER AND VIOLENCE AND AHHHHHH. #BeScaredBeAngry
 
 (different scene...)
 ACT V - Post-credits peace
-
 *************************************/
 
 function Scene_Post_Credits(){
-
 	var self = this;
 	Scene.call(self);
 

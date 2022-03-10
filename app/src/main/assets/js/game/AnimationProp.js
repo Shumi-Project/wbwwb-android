@@ -1,11 +1,4 @@
-/********
-
-Just plays an animation.
-
-*********/
-
-function AnimationProp(scene){
-
+function AnimationProp (scene) {
 	var self = this;
 	self._CLASS_ = "AnimationProp";
 
@@ -23,10 +16,9 @@ function AnimationProp(scene){
     var g = new PIXI.Container();
     self.graphics = g;
 
-	// DO IT.
+    // DO IT.
 	self.DRAWING_SCALE = 0.65;
-	self.init = function(x, y, resourceName){
-
+	self.init = function (x, y, resourceName) {
 		// Make it!
 		var mc = MakeMovieClip(resourceName);
 		mc.scale.x = mc.scale.y = self.DRAWING_SCALE;
@@ -43,27 +35,25 @@ function AnimationProp(scene){
 
 		// Update!
 		self.update();
-
 	};
 
-    // Update
-    // TO IMPLEMENT: YOUR OWN ANIMATION CODDE
-	self.update = function(){
+	// Update
+    // TO IMPLEMENT: YOUR OWN ANIMATION CODE
+	self.update = function () {
 		g.x = self.x;
     	g.y = self.y;
     	self.updateAnimation();
 	};
-	self.updateAnimation = function(){};
+	self.updateAnimation = function () {};
 
 	/////////////
 	// THE END //
 	/////////////
 
 	// KILL ME
-	self.kill = function(){
+	self.kill = function() {
 		var world = self.scene.world;
 		world.props.splice(world.props.indexOf(self),1);
 		world.layers.props.removeChild(self.graphics);
 	};
-
 }

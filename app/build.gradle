@@ -1,37 +1,45 @@
-plugins {
-	id 'com.android.application'
-}
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
-	
-	defaultConfig {
-		applicationId "com.aozoradev.wbwwb"
-		minSdkVersion 21
-		targetSdkVersion 28
-		versionCode 1
-		versionName "1.0"
-	}
-	
-	compileOptions {
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
+
+    defaultConfig {
+        applicationId "com.shumiproject.wbwwb"
+        minSdkVersion 19
+        targetSdkVersion 32
+        versionCode 1
+        versionName "2.0"
+    }
+    
+    signingConfigs {
+        debug {
+            storeFile file('debug.jks')
+            keyAlias 'android'
+            storePassword 'android'
+            keyPassword 'android'
+        }
+    }
+    
+    buildTypes {
+        release {
+            signingConfig signingConfigs.debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+    
+    compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-	
-	buildTypes {
-		release {
-			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-		}
-	}
+    
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
             outputFileName = new File("wbwwb-android.apk")
         }
     }
-}
-
-dependencies {
-	implementation fileTree(dir: 'libs', include: ['*.jar'])
 }

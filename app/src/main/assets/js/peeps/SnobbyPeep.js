@@ -1,15 +1,11 @@
 Game.addToManifest({
-
     face_snobby: "sprites/peeps/face_snobby.json",
     face_snobby_hmph: "sprites/peeps/face_snobby_hmph.json",
-
     peep_huh: "sounds/peep_huh.mp3",
     peep_hmph: "sounds/peep_hmph.mp3"
-
 });
 
 /****
-
 FRAMES:
 00-03: disbelief at screen
 04-07: grouch face (07 is resting)
@@ -17,11 +13,9 @@ FRAMES:
 15-20: HMPH. (LOOP HMPH at 16)
 22-25: POP.
 26-29: Go Away. FLIP, then go to 07.
-
 ****/
 
-function SnobbyPeep(scene){
-
+function SnobbyPeep(scene) {
 	var self = this;
 	Peep.apply(self, [scene]);
     self._CLASS_ = "SnobbyPeep";
@@ -51,12 +45,11 @@ function SnobbyPeep(scene){
     self.gracePeriod = -1;
 
     // HACK
-    self.HACK_JUMPSTART = function(){
+    self.HACK_JUMPSTART = function() {
         MODE = MODE_BLINK;
     };
 
-    self.callbacks.update = function(){
-        
+    self.callbacks.update = function() {
         // Animate on doubles! ...or... TRIPLES?
         doubles = (doubles+1)%3;
 
@@ -69,25 +62,25 @@ function SnobbyPeep(scene){
         var face = self.faceMC;
         var frame = face.currentFrame;
         self.wordMC.scale.x = self.flip*self.DRAWING_SCALE;
-        if(doubles==0){
-            switch(MODE){
+        if (doubles==0) {
+            switch(MODE) {
                 case MODE_STARE:
-                    if(frame<3) face.gotoAndStop(frame+1);
+                    if (frame<3) face.gotoAndStop(frame+1);
                     break;
                 case MODE_BLINK:
-                    if(frame<7) face.gotoAndStop(frame+1);
+                    if (frame<7) face.gotoAndStop(frame+1);
                     break;
                 case MODE_SMUG:
-                    if(frame<14) face.gotoAndStop(frame+1);
+                    if (frame<14) face.gotoAndStop(frame+1);
                     break;
                 case MODE_HMPH:
-                    if(frame<20){
+                    if (frame<20) {
                         frame = frame+1;
                         face.gotoAndStop(frame);
-                        if(frame>=18){
-                            if(self.wordMC.currentFrame==0){
+                        if (frame>=18) {
+                            if (self.wordMC.currentFrame==0) {
                                 self.wordMC.gotoAndStop(1);
-                            }else{
+                            } else {
                                 var nextFrame = self.wordMC.currentFrame+1;
                                 if(nextFrame>3) nextFrame=1;
                                 self.wordMC.gotoAndStop(nextFrame);
@@ -97,36 +90,28 @@ function SnobbyPeep(scene){
                     break;
                 case MODE_POP:
                     self.wordMC.gotoAndStop(0);
-                    if(frame<25) face.gotoAndStop(frame+1);
+                    if (frame<25) face.gotoAndStop(frame+1);
                     break;
                 case MODE_AWAY:
-                    if(frame<29){
+                    if (frame<29) {
                         face.gotoAndStop(frame+1);
-                    }else{
-
+                    } else {
                         // Loop back
                         face.gotoAndStop(7);
                         MODE = MODE_BLINK;
                         self.isSmug = false;
-                        
                     }
                     break;
             }
         }
 
-        ///////////////////////////
-        ///////////////////////////
-        ///////////////////////////
-
         // Shocked by a square!
-        if(!self.isSmug){
-
-            if(self.gracePeriod<=0){
-                var closeTo = self.touchingPeeps(90, function(peep){
+        if (!self.isSmug) {
+            if (self.gracePeriod<=0) {
+                var closeTo = self.touchingPeeps(90, function(peep) {
                     return(!peep.offended && peep.type=="circle");
                 });
-                if(closeTo.length>0 && self.isWalking){
-
+                if (closeTo.length>0 && self.isWalking) {
                     // Bounce back
                     self.flip = (closeTo[0].x>self.x) ? 1 : -1;
                     self.bounce = 1.5;
@@ -139,14 +124,13 @@ function SnobbyPeep(scene){
                     Game.sounds.peep_huh.play();
 
                     // They get confused!
-                    closeTo.forEach(function(other){
-                        if(other.offended) return;
+                    closeTo.forEach(function(other) {
+                        if (other.offended) return;
                         other.beOffended(self);
                     });
 
                     // HMPH!
-                    self.setTimeout(function(){
-                        
+                    self.setTimeout(function() {
                         MODE = MODE_HMPH;
                         self.isSmug = true;
 
@@ -154,12 +138,10 @@ function SnobbyPeep(scene){
                         Game.sounds.peep_hmph.play();
 
                         // POP!
-                        self.setTimeout(function(){
+                        self.setTimeout(function() {
                             MODE = MODE_POP;
-
                             // Then stop
-                            self.setTimeout(function(){
-
+                            self.setTimeout(function() {
                                 // Turn around & walk
                                 self.flip *= -1;
                                 self.startWalking();
@@ -169,26 +151,19 @@ function SnobbyPeep(scene){
                                 // Move away...
                                 MODE = MODE_AWAY;
                                 self.gracePeriod = 60;
-
                             },_s(0.8));
-
                         },_s(1.4));
-
                     },_s(0.9));
-
                 }
-            }else{
+            } else {
                 self.gracePeriod--;
             }
-
         }
-
     };
 
     // AT FIRST...
-    self.watchTV = function(){
-
-        self.clearAnims(); // just in case...
+    self.watchTV = function() {
+        self.clearAnims(); // jic
         
         // 0) Stop & look
         var tv = scene.tv;
@@ -198,28 +173,24 @@ function SnobbyPeep(scene){
         var WAIT = Director.ZOOM_OUT_1_TIME + Director.SEE_VIEWERS_TIME;
 
         // 1) Become nervous
-        self.setTimeout(function(){
-            
+        self.setTimeout(function() {
             self.bounce = 1.6;
             MODE = MODE_STARE;
 
             // SQUEAK
             Game.sounds.squeak.play();
-
         },_s(OFFSET+BEAT*2));
 
         // 2) Blink...
-        self.setTimeout(function(){
+        self.setTimeout(function() {
             self.bounce = 1.3;
             MODE = MODE_BLINK;
         },_s(OFFSET+WAIT));
 
         // 3) And go on.
-        self.setTimeout(function(){
+        self.setTimeout(function() {
             // self.bounce = 1.2;
             self.startWalking();
         },_s(OFFSET+WAIT+1));
-
     };
-
 }

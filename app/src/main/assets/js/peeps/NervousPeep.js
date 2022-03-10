@@ -1,14 +1,11 @@
 Game.addToManifest({
-
     face_nervous: "sprites/peeps/face_nervous.json",
-
     peep_gasp: "sounds/peep_gasp.mp3",
     peep_hngh: "sounds/peep_hngh.mp3"
 
 });
 
 /****
-
 FRAMES:
 00-03: nervous at screen
 00-06: look away from screen (frame 06 is resting)
@@ -17,11 +14,9 @@ FRAMES:
 17-22: shocked
 23-25: run away
 26-29: return to normal (frame 06 is resting)
-
 ****/
 
-function NervousPeep(scene){
-
+function NervousPeep (scene) {
 	var self = this;
 	Peep.apply(self, [scene]);
     self._CLASS_ = "NervousPeep";
@@ -40,14 +35,13 @@ function NervousPeep(scene){
     var MODE_CALMDOWN = 4;
 
     // HACK
-    self.HACK_JUMPSTART = function(){
+    self.HACK_JUMPSTART = function () {
         MODE = MODE_BLINK;
     };
 
     var doubles = 0;
     self.isShocked = false;
-    self.callbacks.update = function(){
-        
+    self.callbacks.update = function () {
         // Animate on doubles! ...or... TRIPLES?
         doubles = (doubles+1)%3;
 
@@ -59,38 +53,37 @@ function NervousPeep(scene){
         // FRAMES: MANUALLY
         var face = self.faceMC;
         var frame = face.currentFrame;
-        if(doubles==0){
-            switch(MODE){
+        if (doubles==0) {
+            switch (MODE) {
                 case MODE_STARE:
-                    if(frame<3) face.gotoAndStop(frame+1);
+                    if (frame<3) face.gotoAndStop(frame+1);
                     break;
                 case MODE_BLINK:
-                    if(frame<6) face.gotoAndStop(frame+1);
+                    if (frame<6) face.gotoAndStop(frame+1);
 
                     // Look shifty...
-                    if(frame==6){
+                    if (frame==6) {
                         if(Math.random()<0.05) face.gotoAndStop(frame+1);
-                    }else if(frame<10){
+                    } else if (frame<10) {
                         face.gotoAndStop(frame+1);
-                    }else if(frame==10){
+                    } else if (frame==10) {
                         if(Math.random()<0.05) face.gotoAndStop(frame+1);
-                    }else if(frame<16){
+                    } else if (frame<16) {
                         face.gotoAndStop(frame+1);
-                    }else if(frame==16){
+                    } else if (frame==16) {
                         face.gotoAndStop(6);
                     }
-
                     break;
                 case MODE_SHOCKED:
-                    if(frame<22) face.gotoAndStop(frame+1);
+                    if (frame<22) face.gotoAndStop(frame+1);
                     break;
                 case MODE_RUNAWAY:
-                    if(frame<25) face.gotoAndStop(frame+1);
+                    if (frame<25) face.gotoAndStop(frame+1);
                     break;
                 case MODE_CALMDOWN:
-                    if(frame<29){
+                    if (frame<29) {
                         face.gotoAndStop(frame+1);
-                    }else{
+                    } else {
                         face.gotoAndStop(6);
                         MODE = MODE_BLINK;
                         self.isShocked = false;
@@ -99,17 +92,12 @@ function NervousPeep(scene){
             }
         }
 
-        ///////////////////////////
-        ///////////////////////////
-        ///////////////////////////
-
         // Shocked by a square!
-        if(!self.isShocked){
+        if (!self.isShocked) {
             var closeTo = self.touchingPeeps(90, function(peep){
                 return(peep.isWalking && peep.type=="square");
             });
-            if(closeTo.length>0 && self.isWalking){
-
+            if (closeTo.length>0 && self.isWalking) {
                 // BE SHOCKED
                 MODE = MODE_SHOCKED;
                 self.isWalking = false;
@@ -125,14 +113,13 @@ function NervousPeep(scene){
                 self.vel.x = -self.flip*5;
 
                 // They get confused!
-                closeTo.forEach(function(other){
-                    if(!other.isWalking) return;
+                closeTo.forEach(function(other) {
+                    if (!other.isWalking) return;
                     other.beConfused(self);
                 });
 
                 // Run away!
-                self.setTimeout(function(){
-
+                self.setTimeout(function() {
                     // Sound!
                     Game.sounds.peep_hngh.volume(0.6);
                     Game.sounds.peep_hngh.play();
@@ -143,35 +130,30 @@ function NervousPeep(scene){
                     self.bounce = 1.5;
                     self.startWalking();
                     self.speed = 3.5;
-                    if(self.flip>0){
+                    if (self.flip>0) {
                         self.direction = Math.TAU*0/4;
-                    }else{
+                    } else {
                         self.direction = Math.TAU*2/4;
                     }
 
                     // Calm down...
-                    self.setTimeout(function(){
+                    self.setTimeout(function() {
                         MODE = MODE_CALMDOWN;
                         self.callbacks.startWalking();
                     },_s(3));
-
-
                 },_s(1));
-
             }
         }
-
     };
 
     // Speed...
-    self.callbacks.startWalking = function(){
+    self.callbacks.startWalking = function() {
         self.speed = 0.8;
     };
 
     // AT FIRST...
-    self.watchTV = function(){
-
-        self.clearAnims(); // just in case...
+    self.watchTV = function() {
+        self.clearAnims(); // jic
         
         // 0) Stop & look
         var tv = scene.tv;
@@ -181,32 +163,29 @@ function NervousPeep(scene){
         var WAIT = Director.ZOOM_OUT_1_TIME + Director.SEE_VIEWERS_TIME;
 
         // 1) Become nervous
-        self.setTimeout(function(){
+        self.setTimeout(function () {
             self.bounce = 1.6;
             MODE = MODE_STARE;
 
             // SQUEAK
             Game.sounds.squeak.play();
-            
         },_s(OFFSET+BEAT*2));
 
         // 2) Blink...
-        self.setTimeout(function(){
+        self.setTimeout(function () {
             self.bounce = 1.3;
             MODE = MODE_BLINK;
         },_s(OFFSET+WAIT));
 
         // 3) And go on.
-        self.setTimeout(function(){
+        self.setTimeout(function () {
             // self.bounce = 1.2;
             self.startWalking();
         },_s(OFFSET+WAIT+1));
-
     };
 
-    // IS SCARED?
-    self.isScared = function(){
+    // IS SCARED
+    self.isScared = function () {
         return self.isShocked;
     };
-
 }

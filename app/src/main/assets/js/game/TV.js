@@ -1,10 +1,3 @@
-/**************************************
-
-TV:
-Is a prop you can add a photo to.
-
-**************************************/
-
 Game.addToManifest({
 	tv: "sprites/tv.png",
 	chyron: "sprites/chyron.png",
@@ -13,8 +6,7 @@ Game.addToManifest({
 	chyron3_id: "sprites/chyron3_id.png"
 });
 
-function TV(scene){
-
+function TV (scene) {
 	var self = this;
 	self._CLASS_ = "TV";
 
@@ -26,7 +18,7 @@ function TV(scene){
 	self.height = 180;
 
 	// Graphics
-	var resources = PIXI.loader.resources;
+	var resources = PIXI.Loader.shared.resources;
     var g = new PIXI.Container();
     var bg = new PIXI.Sprite(resources.tv.texture);
     bg.anchor.x = 0.5;
@@ -51,18 +43,17 @@ function TV(scene){
     g.addChild(photoContainer);
 
     // Update
-	self.update = function(){
+	self.update = function () {
 		self.updateGraphics();
 	};
-	self.updateGraphics = function(){
+	self.updateGraphics = function () {
 		g.x = self.x;
     	g.y = self.y;
 	};
 
 	// PHOTO
 	var photo;
-	self.placePhoto = function(options){
-
+	self.placePhoto = function (options) {
 		// OPTIONS
 		var photoTexture = options.photo;
 		var text = options.text || "";
@@ -84,24 +75,27 @@ function TV(scene){
 
 		// Chyron BG
 		var resourceName;
-		if(options.nothing) {
-		  var lang = window.LANG;
-		  if (lang === "ID") resourceName="chyron3_id";
-		  else resourceName="chyron3";
-		 }
-		else if(options.fail) resourceName="chyron2";
-		else resourceName="chyron";
+		if (options.nothing) {
+			var lang = window.LANG;
+		  	if (lang === "ID") {
+		  		resourceName="chyron3_id";
+		  	} else { 
+		  		resourceName="chyron3";
+		  	}
+		}
+		else if (options.fail) resourceName = "chyron2";
+		else resourceName = "chyron";
 		var bg = new MakeSprite(resourceName);
 		bg.scale.x = bg.scale.y = 1/8;
 		chyron.addChild(bg);
 
 		// Chyron Text
-		if(!options.nothing){
-			var fontsize=100, max=14;
-			if(text.length>max){ // more than [max] chars...
+		if (!options.nothing) {
+			var fontsize = 100, max = 14;
+			if (text.length > max){ // more than [max] chars...
 				fontsize = Math.floor(max*fontsize/text.length);
 			}
-		    var text = new PIXI.Text(text, {font:"bold "+fontsize+"px Poppins", fill:"#FFF"});
+		    var text = new PIXI.Text(text, { fontFamily: "Poppins", fontSize: fontsize, fontWeight: "bold", fill:"#FFF" });
 		    text.scale.x = text.scale.y = 0.2;
 		    text.anchor.x = 0;
 		    text.anchor.y = 0.5;
@@ -109,10 +103,8 @@ function TV(scene){
 		    text.y = 115;
 		    chyron.addChild(text);
 		}
-
 	}
 
 	// Update!
 	self.update();
-
 }

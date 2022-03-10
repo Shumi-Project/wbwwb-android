@@ -1,16 +1,13 @@
 /*****************************
-
 ACT II: THE ESCALATION
 1. Weird square screams at others
 2. Circle becomes fearful
 3. Square becomes snobby
 4. Circle becomes angry...
 5. Angry escalates... until...
-
 ******************************/
 
 function Stage_Screamer(self){
-
     // The crazy one
     var crazy = new CrazyPeep(self);
     self.world.addPeep(crazy);

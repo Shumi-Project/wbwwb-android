@@ -2,15 +2,7 @@ Game.addToManifest({
     gore: "sprites/peeps/gore.json"
 });
 
-/**************************************
-
-Gore:
-Just a prop that bounces around.
-
-**************************************/
-
-function Gore(scene){
-
+function Gore (scene) {
 	var self = this;
 	self._CLASS_ = "Gore";
 
@@ -36,15 +28,14 @@ function Gore(scene){
 	self.z = 0;
 	self.rotation = 0;
 	self.gravity = 0.5;
-	self.init = function(options){
-
+	self.init = function (options) {
 		// All them dang options
-		if(options.direction!==undefined) self.direction=options.direction;
-		if(options.velocity!==undefined) self.velocity=options.velocity;
-		if(options.x!==undefined) self.x=options.x;
-		if(options.y!==undefined) self.y=options.y;
-		if(options.z!==undefined) self.z=options.z;
-		if(options.gravity!==undefined) self.gravity=options.gravity;
+		if(options.direction !== undefined) self.direction = options.direction;
+		if(options.velocity !== undefined) self.velocity = options.velocity;
+		if(options.x !== undefined) self.x = options.x;
+		if(options.y !== undefined) self.y = options.y;
+		if(options.z !== undefined) self.z = options.z;
+		if(options.gravity !== undefined) self.gravity = options.gravity;
 
 		// And then convert to vx & vz.
 		self.vx = Math.cos(self.direction)*self.velocity;
@@ -55,8 +46,7 @@ function Gore(scene){
 	};
 
 	// Update!
-	self.update = function(){
-
+	self.update = function () {
 		// FALLING
 		self.x += self.vx;
 		self.y += self.vy;
@@ -70,8 +60,7 @@ function Gore(scene){
 			self.vx *= 0.8;
 			self.vy *= 0.8;
 			self.vr *= 0.8;
-			if(Math.abs(self.vz)>1){
-
+			if(Math.abs(self.vz)>1) {
 				// BLOOD FOR THE BLOOD GOD
 				var blood = new Blood(scene);
                 blood.init({
@@ -80,24 +69,20 @@ function Gore(scene){
                     scale: Math.abs(self.vz)*0.02
                 });
                 scene.world.addBG(blood);
-
                 // Bounce
                 self.vz *= -0.2;
-
-			}else{
+			} else {
 				self.vz = 0;
 			}
 		}
-
 		// Convert to Graphics!
 		g.x = self.x;
 		g.y = self.y + self.z;
 		g.rotation = self.rotation;
-
 	};
 
 	// KILL ME
-	self.kill = function(){
+	self.kill = function () {
 		var world = self.scene.world;
 		world.props.splice(world.props.indexOf(self),1);
 		world.layers.props.removeChild(self.graphics);

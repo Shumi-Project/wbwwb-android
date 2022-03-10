@@ -7,16 +7,11 @@
 		<div id="modal_shade"></div>
 		<div class="overlay" id="warning">
 			<div>oh noes</div>
-			<div>
-			I encountered an error. To fix it,<br>
-     can you please restart the game?
-			</div>
+			<div>I encountered an error. To fix it,<br/>can you please restart the game?</div>
 		</div>
 		<div class="overlay" id="paused">
 			<div>paused</div>
-			<div>
-			click anywhere to resume
-			</div>
+			<div>click anywhere to resume</div>
 		</div>
 	</body>
 </html>
@@ -79,24 +74,19 @@
 <script src="js/scenes/Scene_Credits.js"></script>
 <script src="js/scenes/Scene_Post_Credits.js"></script>
 <script src="js/scenes/Scene_Post_Post_Credits.js"></script>
-<script src="js/scenes/Scene_EndPrototype.js"></script>
 <script src="js/scenes/Act_I.js"></script>
 <script src="js/scenes/Act_II.js"></script>
 <script src="js/scenes/Act_III.js"></script>
-<script src="js/scenes/Scene_Meta.js"></script>
 
 <!-- Game Scripts -->
 <script>
 Game.stats = false;
-window.onload = function(){
-	try{
+window.onload = function() {
+	try {
 		Game.init();
-		//Game.init("Game");
-	}catch(e){
+	} catch(e) {
+		console.log(e);
 		document.getElementById("warning").style.display = "block";
 	}
 };
-window.SHARE_TEXT = "I just played this really weird game about the news. WE BECOME WHAT WE BEHOLD:"
-window.SHARE_URL = "https://ncase.itch.io/wbwwb";
-window.LANG = "EN";
 </script>

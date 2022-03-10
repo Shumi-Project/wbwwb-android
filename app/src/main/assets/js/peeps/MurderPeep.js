@@ -1,20 +1,15 @@
 Game.addToManifest({
-
     face_murder: "sprites/peeps/face_murder.json",
-
     weapon_gun: "sprites/peeps/weapon_gun.json",
     weapon_axe: "sprites/peeps/weapon_axe.json",
     weapon_bat: "sprites/peeps/weapon_bat.json",
     weapon_shotgun: "sprites/peeps/weapon_shotgun.json",
-
     gunshot: "sounds/gunshot.mp3",
     shotgun: "sounds/shotgun.mp3",
     impact: "sounds/impact.mp3"
-
 });
 
 /****
-
 FACE FRAMES:
 00-04: crazy at screen (loop)
 05-13: blink, and crazy forever (loop: 09-13)
@@ -23,11 +18,9 @@ WEAPON FRAMES:
 00-05: pull out (04 is rest)
 06: BAM
 07-15: return to rest (04 is rest)
-
 ****/
 
-function MurderPeep(scene){
-
+function MurderPeep (scene) {
     var self = this;
     Peep.apply(self, [scene]);
     self._CLASS_ = "MurderPeep";
@@ -40,8 +33,7 @@ function MurderPeep(scene){
     self.weaponMC = null;
 
     // Init with what kinda weapon?
-    self.init = function(shapeType, weaponType){
-
+    self.init = function (shapeType, weaponType) {
         // Type
         self.type = shapeType;
         self.bodyMC.gotoAndStop((shapeType=="circle") ? 0 : 1);
@@ -54,11 +46,11 @@ function MurderPeep(scene){
         // Transform
         self.x = scene.tv.x;
         self.y = scene.tv.y+Math.random(); // tiny offset to avoid glitchy depth-sort
-        if(shapeType=="circle"){
+        if (shapeType=="circle") {
             self.x -= 60;
             self.flip = 1;
             self.gracePeriod = 30;
-        }else{
+        } else {
             self.x += 60;
             self.flip = -1;
             self.gracePeriod = 50;
@@ -66,7 +58,6 @@ function MurderPeep(scene){
 
         // Let's Watch TV!
         self.watchTV();
-
     };
 
     // Animate on doubles
@@ -79,8 +70,7 @@ function MurderPeep(scene){
     var doubles = 0;
     self.gracePeriod = -1;
     self.standingTime = -1;
-    self.callbacks.update = function(){
-        
+    self.callbacks.update = function () {
         // Animate on doubles! ...or... TRIPLES?
         doubles = (doubles+1)%4;
 
@@ -90,20 +80,19 @@ function MurderPeep(scene){
         },0.15);
 
         // FRAMES: MANUALLY
-        if(doubles==0){
-
+        if (doubles==0) {
             var frame;
 
             // Face
             var face = self.faceMC;
             frame = face.currentFrame;
-            switch(MODE){
+            switch (MODE) {
                 case MODE_STARE:
-                    if(frame<4) face.gotoAndStop(frame+1);
+                    if (frame<4) face.gotoAndStop(frame+1);
                     else face.gotoAndStop(0);
                     break;
                 case MODE_CRAZY:
-                    if(frame<13) face.gotoAndStop(frame+1);
+                    if (frame<13) face.gotoAndStop(frame+1);
                     else face.gotoAndStop(9);
                     break;
             }
@@ -111,39 +100,33 @@ function MurderPeep(scene){
             // Weapon
             var weapon = self.weaponMC;
             frame = weapon.currentFrame;
-            if(MODE==MODE_CRAZY || MODE==MODE_KILL){
-                if(frame<5){
+            if (MODE==MODE_CRAZY || MODE==MODE_KILL) {
+                if (frame<5) {
                     weapon.gotoAndStop(frame+1);
                 }
-                if(frame>=6){
-                    if(frame<15){
+                if (frame>=6) {
+                    if (frame<15) {
                         weapon.gotoAndStop(frame+1);
-                    }else{
-                        if(self.standingTime<=0){
+                    } else {
+                        if (self.standingTime<=0) {
                             self.startWalking();
                             weapon.gotoAndStop(5);
-                        }else{
+                        } else {
                             self.standingTime--;
                         }
                     }
                 }
             }
-
         }
 
-        ///////////////////////////
-        ///////////////////////////
-        ///////////////////////////
-
         // KILL THE OTHER KIND
-        if(self.gracePeriod<=0){
-            if(!self.isShocked){
+        if (self.gracePeriod<=0) {
+            if (!self.isShocked) {
                 var otherType = (self.type=="circle") ? "square" : "circle";
                 var closeTo = self.touchingPeeps(120, function(peep){
                     return(peep._CLASS_=="PanicPeep" && peep.type==otherType);
                 });
-                if(closeTo.length>0 && self.isWalking){
-
+                if (closeTo.length>0 && self.isWalking) {
                     // FACE 'EM
                     self.flip = (closeTo[0].x>self.x) ? 1 : -1;
 
@@ -158,7 +141,7 @@ function MurderPeep(scene){
                     // What sound?
                     var sound = null;
                     var volume = 0.2;
-                    switch(self.weaponType){
+                    switch (self.weaponType) {
                         case "gun":
                             sound = Game.sounds.gunshot;
                             break;
@@ -177,19 +160,18 @@ function MurderPeep(scene){
 
                 }
             }
-        }else if(self.isWalking){
+        } else if (self.isWalking) {
             self.gracePeriod--;
         }
-
     };
 
     // Speed...
-    self.callbacks.startWalking = function(){
+    self.callbacks.startWalking = function() {
         self.speed = 3;
     };
 
     // SAME WALK ANIM, EXCEPT: RANDOM ROTATION
-    self.walkAnim = function(){
+    self.walkAnim = function() {
         var g = self.graphics;
 
         // Hop & Flip
@@ -201,20 +183,18 @@ function MurderPeep(scene){
         var t = self.hop*Math.PI*2;
         g.pivot.y = Math.abs(Math.sin(t))*15;
         g.rotation = (Math.random()*2-1)*0.05;
-
     };
 
     // SAME STAND ANIM, EXCEPT: RANDOM ROTATION
-    self.standAnim = function(){
+    self.standAnim = function () {
         var g = self.graphics;
         g.rotation = (Math.random()*2-1)*0.05;
         g.pivot.y = 0;
     };
 
     // AT FIRST...
-    self.watchTV = function(){
-
-        self.clearAnims(); // just in case...
+    self.watchTV = function () {
+        self.clearAnims(); // jic...
         
         // 0) Stop & look
         var tv = scene.tv;
@@ -224,21 +204,19 @@ function MurderPeep(scene){
         var WAIT = Director.ZOOM_OUT_1_TIME + Director.SEE_VIEWERS_TIME;
 
         // 1) Become nervous
-        self.setTimeout(function(){
+        self.setTimeout(function () {
             self.bounce = 1.6;
             MODE = MODE_CRAZY;            
         },_s(OFFSET+BEAT*2));
 
         // 3) And go on.
-        self.setTimeout(function(){
+        self.setTimeout(function () {
             self.startWalking();
-            if(self.type=="circle"){
+            if (self.type=="circle") {
                 self.direction = Math.PI + (Math.random()*2-1);
-            }else{
+            } else {
                 self.direction = (Math.random()*2-1);
             }
         },_s(OFFSET+WAIT+1));
-
     };
-
 }

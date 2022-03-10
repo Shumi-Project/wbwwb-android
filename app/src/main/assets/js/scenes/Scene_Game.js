@@ -1,5 +1,4 @@
 /************************************
-
 THE GAME SCENE. THE BIG 'UN.
 
 ACT I - Teaching controls, showing main feedback loop
@@ -9,11 +8,9 @@ ACT IV - MURDER AND VIOLENCE AND AHHHHHH. #BeScaredBeAngry
 
 (different scene...)
 ACT V - Post-credits peace
-
 *************************************/
 
-function Scene_Game(){
-
+function Scene_Game () {
 	var self = this;
 	Scene.call(self);
 
@@ -43,8 +40,7 @@ function Scene_Game(){
     self.avoidSpots = [];
 
     // UPDATE
-    self.update = function(){
-        
+    self.update = function() {        
         self.world.update();
         self.camera.update();
         self.director.update();
@@ -61,14 +57,13 @@ function Scene_Game(){
         var ratio = self.zoomer.timer/self.zoomer.fullTimer;
         ratio = (1-ratio)/1;
         self.shaker.baseAlpha = 0.15 + ratio*0.45;
-
     };
 
 	// TO IMPLEMENT
 	self.kill = function(){};
 
     // Going to a Stage
-    self.go = function(sceneFunc){
+    self.go = function(sceneFunc) {
         sceneFunc(self);
         self.update();
     };

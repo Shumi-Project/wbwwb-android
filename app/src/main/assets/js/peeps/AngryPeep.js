@@ -1,21 +1,17 @@
 Game.addToManifest({
     face_angry: "sprites/peeps/face_angry.json",
     body_red: "sprites/peeps/body_red.json",
-
     shout: "sounds/shout.mp3"
 });
 
 /****
-
 FRAMES:
 00-05: frown at screen
 06-10: anger awayyyyyy!
 11-25: SHOUT! // loop back to 10. (>=20, no, not screaming)
-
 ****/
 
-function AngryPeep(scene, type){
-
+function AngryPeep (scene, type) {
     var self = this;
     Peep.apply(self, [scene]);
     self._CLASS_ = "AngryPeep";
@@ -31,7 +27,7 @@ function AngryPeep(scene, type){
 
     // Set Type: Am I a circle or square?
     self.type = "???";
-    self.setType = function(type){
+    self.setType = function (type) {
         self.type = type;
         self.bodyMC.gotoAndStop((type=="circle") ? 0 : 1);
         self.bodyRedMC.gotoAndStop(self.bodyMC.currentFrame);
@@ -50,24 +46,23 @@ function AngryPeep(scene, type){
     self.gracePeriod = -1;
 
     // HACK
-    self.HACK_JUMPSTART = function(){
+    self.HACK_JUMPSTART = function () {
         MODE = MODE_BLINK;
     };
 
     // WANDERING
     self.wander = 0;
-    self.changeWander = function(){
+    self.changeWander = function () {
         self.wander = Math.random()*0.1-0.05;
     };
 
-    self.callbacks.update = function(){
-        
+    self.callbacks.update = function () {
         // Animate on doubles! ...or... TRIPLES?
         doubles = (doubles+1)%3;
 
         // Wander around
         self.direction += self.wander;
-        if(Math.random()<0.05) self.changeWander();
+        if (Math.random()<0.05) self.changeWander();
         self.stayWithinRect({
             l:100, r:860, t:100, b:480
         },0.15);
@@ -75,20 +70,20 @@ function AngryPeep(scene, type){
         // FRAMES: MANUALLY
         var face = self.faceMC;
         var frame = face.currentFrame;
-        if(doubles==0){
-            switch(MODE){
+        if (doubles==0) {
+            switch (MODE) {
                 case MODE_STARE:
-                    if(frame<5) face.gotoAndStop(frame+1);
+                    if (frame<5) face.gotoAndStop(frame+1);
                     break;
                 case MODE_BLINK:
-                    if(frame<10){
+                    if (frame<10) {
                         face.gotoAndStop(frame+1);
                     }
                     break;
                 case MODE_SHOUT:
-                    if(frame<25){
+                    if (frame<25) {
                         face.gotoAndStop(frame+1);
-                    }else{
+                    } else {
                         face.gotoAndStop(10);
                         MODE = MODE_BLINK;
                         self.isShouting = false;
@@ -97,27 +92,21 @@ function AngryPeep(scene, type){
                     break;
             }
         }
-
-        if(frame>=10){
+        if (frame>=10) {
             self.bodyRedMC.alpha = self.bodyRedMC.alpha*0.9 + 1*0.1;
         }
-
-        ///////////////////////////
-        ///////////////////////////
-        ///////////////////////////
 
         // Less red bod...
         // self.bodyRedMC.alpha *= 0.985;
 
         // Scream at THE OPPOSITE TYPE
         // Grace period... AND IF SCENE ALLOWS IT.
-        if(self.gracePeriod<=0 && !scene.noYellingYet){
+        if (self.gracePeriod<=0 && !scene.noYellingYet) {
             var opposite = (self.type=="circle") ? "square" : "circle";
-            var closeTo = self.touchingPeeps(90, function(peep){
-                return(!peep.offended && peep.isWalking && peep.type==opposite);
+            var closeTo = self.touchingPeeps(90, function(peep) {
+                return (!peep.offended && peep.isWalking && peep.type==opposite);
             });
-            if(self.isWalking && closeTo.length>0){
-
+            if (self.isWalking && closeTo.length>0) {
                 var other = closeTo[0];
 
                 // Bounce TOWARDS
@@ -134,14 +123,14 @@ function AngryPeep(scene, type){
 
                 // AHHHHH
                 var peeps = scene.world.peeps;
-                var angry = peeps.filter(function(peep){
-                    return(peep._CLASS_=="AngryPeep");
+                var angry = peeps.filter(function(peep) {
+                    return (peep._CLASS_=="AngryPeep");
                 });
                 var angryNum = angry.length;
                 var volume;
-                if(angryNum<5) volume=1;
-                else if(angryNum<10) volume=0.70;
-                else if(angryNum<15) volume=0.42;
+                if (angryNum<5) volume=1;
+                else if (angryNum<10) volume=0.70;
+                else if (angryNum<15) volume=0.42;
                 else volume=0.27;
                 var shout = Game.sounds.shout;
                 shout.volume(volume);
@@ -155,28 +144,25 @@ function AngryPeep(scene, type){
 
                 // If the closeTo is ANOTHER ANGRY ONE.
                 // They get confused!
-                if(other._CLASS_=="NormalPeep"){
-                    if(other.shocked) return;
+                if (other._CLASS_=="NormalPeep") {
+                    if (other.shocked) return;
                     other.vel.x = self.flip*5;
                     other.flip = -1*self.flip;
                     other.beShocked(self);
-                }else{
+                } else {
                     // nothing...?
                 }
-
             }
-        }else{
+        } else {
             self.gracePeriod--;
         }
-
     };
 
     // WEIRD WALK
-    self.walkAnim = function(){
-
+    self.walkAnim = function () {
         // Hop & flip
         self.hop += self.speed/40;
-        if(self.hop>1) self.hop--;
+        if (self.hop>1) self.hop--;
         self.flip = (self.vel.x<0) ? -1 : 1;
 
         // Hop up & down
@@ -187,18 +173,16 @@ function AngryPeep(scene, type){
         // Squash at the bottom of your cycle
         if(self._lastHop<0.5 && self.hop>=0.5) self.bounce = 1.2;
         if(self._lastHop>0.9 && self.hop<=0.1) self.bounce = 1.2;
-
     };
-    self.callbacks.startWalking = function(){
+    self.callbacks.startWalking = function () {
         self.speed = 1.7;
     };
     self.callbacks.startWalking();
 
     // AT FIRST...
-    self.watchTV = function(){
+    self.watchTV = function () {
+        self.clearAnims(); // jic
 
-        self.clearAnims(); // just in case...
-        
         // 0) Stop & look
         var tv = scene.tv;
         self.stopWalking(true);
@@ -207,28 +191,23 @@ function AngryPeep(scene, type){
         var WAIT = Director.ZOOM_OUT_1_TIME + Director.SEE_VIEWERS_TIME;
 
         // 1) Become frowny
-        self.setTimeout(function(){
-            
+        self.setTimeout(function () {    
             self.bounce = 1.6;
             MODE = MODE_STARE;
-            
             // SQUEAK
             Game.sounds.squeak.play();
-
         },_s(BEAT*2+OFFSET));
 
         // 2) Blink...
-        self.setTimeout(function(){
+        self.setTimeout(function () {
             self.bounce = 1.3;
             MODE = MODE_BLINK;
         },_s(WAIT+OFFSET));
 
         // 3) And go on.
-        self.setTimeout(function(){
+        self.setTimeout(function () {
             // self.bounce = 1.2;
             self.startWalking();
         },_s(WAIT+1+OFFSET));
-
     };
-
 }

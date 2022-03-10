@@ -1,16 +1,9 @@
 Game.addToManifest({
-	
 	logo: "sprites/postcredits/logo.png",
-	
-	facebook: "sprites/postcredits/facebook.png",
-	twitter: "sprites/postcredits/twitter.png",
-
 	end_button: "sprites/postcredits/end_button.json"
-
 });
 
-function Scene_Post_Post_Credits(){
-	
+function Scene_Post_Post_Credits() {
 	var self = this;
 	Scene.call(self);
 

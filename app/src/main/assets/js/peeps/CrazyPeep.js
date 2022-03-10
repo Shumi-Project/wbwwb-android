@@ -1,21 +1,15 @@
 Game.addToManifest({
-
 	hangry: "sprites/peeps/hangry.json",
-
     scream: "sounds/scream.mp3"
-
 });
 
 /****
-
 FRAMES:
 00-09: walk loop
 10-20: shout (14-19 as 2ndary loop)
-
 ****/
 
-function CrazyPeep(scene){
-
+function CrazyPeep (scene) {
 	var self = this;
 	Peep.apply(self, [scene]);
     self._CLASS_ = "CrazyPeep";
@@ -38,25 +32,24 @@ function CrazyPeep(scene){
 
     // WANDERING
     self.wander = 0;
-    self.changeWander = function(){
+    self.changeWander = function () {
         self.wander = Math.random()*0.1-0.05;
     };
-    self.callbacks.update = function(){
-
+    self.callbacks.update = function () {
         // NOPE
-        if(self.metaGracePeriod>0){
+        if (self.metaGracePeriod>0) {
             self.metaGracePeriod--;
-            if(self.metaGracePeriod==0){
+            if (self.metaGracePeriod==0) {
                 self.callbacks.startWalking();
             }
             return; // NO MORE.
         }
 
         // Grace Period
-        if(self.gracePeriod>0){
+        if (self.gracePeriod>0) {
             self.gracePeriod--;
         }
-        if(self.wanderGracePeriod>0){
+        if (self.wanderGracePeriod>0) {
             self.wanderGracePeriod--;
         }
 
@@ -64,25 +57,24 @@ function CrazyPeep(scene){
         doubles = (doubles+1)%2;
 
         // Wander around
-        if(self.wanderGracePeriod<=0){
+        if (self.wanderGracePeriod<=0) {
             self.direction += self.wander;
-            if(Math.random()<0.05) self.changeWander();
+            if (Math.random()<0.05) self.changeWander();
         }
 
         // STAY WITHIN GAME FRAME
-        if(self.wanderGracePeriod<=0){
+        if (self.wanderGracePeriod<=0) {
             self.stayWithinRect({
                 l:100, r:860, t:100, b:480
             },0.15);
         }
 
         // BUMP the walking peeps I'm close to.
-        if(self.gracePeriod<=0){
-            var closeTo = self.touchingPeeps(50, function(peep){
+        if (self.gracePeriod<=0) {
+            var closeTo = self.touchingPeeps(50, function (peep) {
                 return peep.isWalking;
             });
-            if(closeTo.length>0 && self.isWalking){
-
+            if (closeTo.length>0 && self.isWalking) {
                 // STOP & SHOUT
                 self.isWalking = false;
                 self.bodyMC.gotoAndStop(10);
@@ -96,18 +88,16 @@ function CrazyPeep(scene){
                 self.gracePeriod = _s(1);
 
                 // SHOCK 'EM
-                closeTo.forEach(function(other){
-                    if(!other.isWalking) return;
+                closeTo.forEach(function (other) {
+                    if (!other.isWalking) return;
                     other.vel.x = self.flip*10;
                     other.flip = -1*self.flip;
                     other.beShocked();
                 });
-
             }
         }
-
     };
-    self.callbacks.startWalking = function(){
+    self.callbacks.startWalking = function () {
         self.speed = 2;
     };
     self.speed = 0;
@@ -117,8 +107,7 @@ function CrazyPeep(scene){
     var loopScreaming = -1;
 
     // WEIRD WALK
-    self.walkAnim = function(){
-
+    self.walkAnim = function () {
         // Hop & flip
         self.hop += self.speed/50;
         if(self.hop>1) self.hop--;
@@ -129,30 +118,28 @@ function CrazyPeep(scene){
         g.pivot.y = Math.abs(Math.sin(t))*20;
 
         // FRAMES: MANUALLY
-        if(doubles==0){
+        if (doubles==0) {
             var nextFrame = self.bodyMC.currentFrame+1;
             if(nextFrame>9) nextFrame=0;
             self.bodyMC.gotoAndStop(nextFrame);
         }
-
     };
 
     // SHOUT STANDING
-    self.standAnim = function(){
-        
+    self.standAnim = function () {
         g.rotation = 0;
         g.pivot.y = 0;
 
         // FRAMES: MANUALLY
-        if(doubles==0){
+        if (doubles==0) {
             var nextFrame = self.bodyMC.currentFrame+1;
-            if(loopScreaming>0){
-                if(nextFrame>19){
+            if (loopScreaming>0) {
+                if (nextFrame>19) {
                     nextFrame=16;
                     loopScreaming--;
                 }
-            }else{
-                if(nextFrame>20){
+            } else {
+                if (nextFrame>20) {
                     nextFrame=0;
                     self.isWalking = true;
                     loopScreaming--;
@@ -160,12 +147,10 @@ function CrazyPeep(scene){
             }
             self.bodyMC.gotoAndStop(nextFrame);
         }
-
     };
 
     // IS SCREAMING?
     self.isScreaming = function(){
         return(loopScreaming>=0);
     };
-
 }

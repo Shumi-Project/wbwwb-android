@@ -4,12 +4,10 @@ Game.addToManifest({
 });
 
 /*****************************
-
 ACT III: THE MURDERS.
 Just lots and lots of murdering.
 Also, after 10 seconds, zoom out
 for 20 seconds into "the real world".
-
 ******************************/
 
 function Stage_Evil(self, HACK){

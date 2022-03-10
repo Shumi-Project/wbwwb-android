@@ -4,17 +4,14 @@ Game.addToManifest({
 });
 
 /****
-
 FRAMES for "face":
 08: LUV
 09: Embarrassed looking up
 10: Embarrassed blink
 11: Embarrassed look fwd
-
 ****/
 
-function LoverPeep(scene){
-
+function LoverPeep (scene) {
 	var self = this;
 	NormalPeep.apply(self, [scene]);
     self._CLASS_ = "LoverPeep";
@@ -26,7 +23,7 @@ function LoverPeep(scene){
 
     // Set Type: ALSO CHANGE SHIRT
     var _oldSetType = self.setType;
-    self.setType = function(type){
+    self.setType = function (type) {
         _oldSetType(type);
         self.shirtMC.gotoAndStop((type=="circle") ? 0 : 1);
     };
@@ -37,14 +34,13 @@ function LoverPeep(scene){
 
     // Follow?
     self.follows = null;
-    self.follow = function(follow){
+    self.follow = function (follow) {
         self.follows = follow;
         self.x = self.follows.x;
         self.y = self.follows.y;
     };
-    self.callbacks.update = function(){
-        if(self.follows){
-
+    self.callbacks.update = function () {
+        if (self.follows) {
             var f = self.follows;
             var tx = f.x - Math.cos(f.direction)*20;
             var ty = f.y - Math.sin(f.direction)*20;
@@ -52,52 +48,49 @@ function LoverPeep(scene){
             // LOOP THEM BOUNDS
             var margin = 50;
             var dx = tx-self.x;
-            while(dx>300){
+            while (dx>300) {
                 tx -= Game.width+margin*2;
                 dx = tx-self.x;
             }
-            while(dx<-300){
+            while (dx<-300) {
                 tx += Game.width+margin*2;
                 dx = tx-self.x;
             }
             var dy = ty-self.y;
-            while(dy>300){
+            while (dy>300) {
                 ty -= Game.height+margin*2;
                 dy = ty-self.y;
             }
-            while(dy<-300){
+            while (dy<-300) {
                 ty += Game.height+margin*2;
                 dy = ty-self.y;
             }
 
             var direction = Math.atan2(dy,dx);
             self.direction = direction;
-        }else{
-
+        } else {
             // stay within game frame
             /*self.stayWithinRect({
                 l:100, r:860, t:100, b:480
             },0.05);*/
-
         }
 
-        if(self.follows && self.isEmbarrassed && self.x>1100){
+        if (self.follows && self.isEmbarrassed && self.x>1100) {
             self.follows.kill();
             self.kill();
         }
 
-        if(self.follows && self.x<-500){
+        if (self.follows && self.x<-500) {
             self.follows.kill();
             self.kill();
         }
-
     };
-    self.callbacks.startWalking = function(){
+    self.callbacks.startWalking = function () {
         self.direction = 3.3; // a bit upwards from a full-left
         self.speed = 1.3;
     };
     var _pastWalkAnim = self.walkAnim;
-    self.walkAnim = function(){
+    self.walkAnim = function () {
         if(self.follows) self.hop+=self.speed/120;
         _pastWalkAnim();
     };
@@ -105,23 +98,22 @@ function LoverPeep(scene){
 
     // STAHP. *THEN walk.*
     self.stopWalking();
-    self.setTimeout(function(){
+    self.setTimeout(function () {
         self.startWalking();
     },_s(BEAT*4));
 
     // MAKE EMBARRASSED
     self.isEmbarrassed = false;
-    self.makeEmbarrassed = function(){
-
-        self.clearAnims(); // just in case...
+    self.makeEmbarrassed = function () {
+        self.clearAnims(); // jic
         
         // 1) Stop & look
         var tv = scene.tv;
         self.x = tv.x;
         self.y = tv.y-5-Math.random(); // tiny offset to avoid glitchy depth-sort
-        if(self.type=="square"){
+        if (self.type=="square") {
             self.x += 80;
-        }else{
+        } else {
             self.x += 120;
         }
         self.stopWalking(true);
@@ -131,17 +123,14 @@ function LoverPeep(scene){
         self.isWatching = true;
 
         // 2) Blink...
-        self.setTimeout(function(){
-            
+        self.setTimeout(function () {
             self.isWatching = false;
             self.faceMC.gotoAndStop(10);
             self.bounce = 1.2;
-
         },_s(WAIT));
 
         // 3) And go on.
-        self.setTimeout(function(){
-            
+        self.setTimeout(function () {
             self.isEmbarrassed = true;
             self.faceMC.gotoAndStop(11);
 
@@ -152,7 +141,5 @@ function LoverPeep(scene){
             self.speed = 3;
             
         },_s(WAIT+0.06));
-
     };
-
 }

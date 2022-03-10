@@ -2,14 +2,7 @@ Game.addToManifest({
     laptop: "sprites/laptop.png"
 });
 
-/*************
-
-Provides a screen zooming-out feature!
-
-**************/
-
-function ScreenZoomOut(scene){
-
+function ScreenZoomOut (scene) {
 	var self = this;
 	self.scene = scene;
 
@@ -20,9 +13,8 @@ function ScreenZoomOut(scene){
 	var offsetX = 816;
 	var offsetY = 459;
 
-	self.init = function(){
-
-		if(self.started) return;
+	self.init = function () {
+		if (self.started) return;
 		self.started = true;
 
 		// Put it on!
@@ -32,11 +24,10 @@ function ScreenZoomOut(scene){
     	scene.graphics.addChild(self.laptop);
 
     	self.update();
-	    
 	};
 
 	self.fixLaptop = function(){
-		if(!self.started) return;
+		if (!self.started) return;
         self.laptop.x = -offsetX - scene.offX/scene.scale;
         self.laptop.y = -offsetY - scene.offY/scene.scale;
 	};
@@ -45,8 +36,7 @@ function ScreenZoomOut(scene){
 	self.completed = false;
 	self.fullTimer = _s(40);
 	self.timer = self.fullTimer;
-	self.update = function(){
-
+	self.update = function () {
 		if(self.completed) return;
 		if(!self.started) return;
 
@@ -62,7 +52,5 @@ function ScreenZoomOut(scene){
 			self.completed = true;
 			self.onComplete();
 		}
-
 	};
-
 }

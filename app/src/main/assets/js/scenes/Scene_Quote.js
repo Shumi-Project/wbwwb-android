@@ -3,12 +3,10 @@ Game.addToManifest({
 	quote0002: "sprites/quote/quote0002.png",
 	quote0003: "sprites/quote/quote0003.png",
 	quote0004: "sprites/quote/quote0004.png",
-
 	bg_park: "sounds/bg_park.mp3"
 });
 
-function Scene_Quote(){
-	
+function Scene_Quote() {
 	var self = this;
 	Scene.call(self);
 
@@ -22,7 +20,7 @@ function Scene_Quote(){
     var q2Sprite = MakeSprite("quote0002");
     q2.addChild(q2Sprite);
     
-    var q2TitleText = new PIXI.Text(textStrings["WBWWB"], {font:"65px Times", fill:"#FFFFFF", align:"center"});
+    var q2TitleText = new PIXI.Text(textStrings["WBWWB"], { fontFamily: "Times", fontSize: 65, fill: "#FFFFFF", align: "center" });
     q2TitleText.anchor.x = 0.5;
     q2TitleText.anchor.y = 0.5;
     q2TitleText.x = Game.width / 2 + 6;
@@ -36,7 +34,7 @@ function Scene_Quote(){
         fontsize = Math.floor(max*fontsize/quoteString.length);
     }
 
-    var q2QuoteText = new PIXI.Text(textStrings["WSOTATOTSU"], {font:fontsize+"px Times", fill:"#FFFFFF", align:"center"});
+    var q2QuoteText = new PIXI.Text(textStrings["WSOTATOTSU"], { fontFamily: "Times", fontSize: fontsize, fill: "#FFFFFF", align: "center"});
     q2QuoteText.anchor.x = 0.5;
     q2QuoteText.anchor.y = 0.5;
     q2QuoteText.x = Game.width / 2 + 6;
@@ -46,7 +44,7 @@ function Scene_Quote(){
     var q3Sprite = MakeSprite("quote0003");
     q3.addChild(q3Sprite);
     
-    var q3Name = new PIXI.Text(textStrings["MarshallMcLuhan"], {font:"33px Times", fill:"#FFFFFF", align:"center"});
+    var q3Name = new PIXI.Text(textStrings["MarshallMcLuhan"], { fontFamily: "Times", fontSize: 33, fill: "#FFFFFF", align: "center" });
     q3Name.anchor.x = 0.5;
     q3Name.anchor.y = 0.5;
     q3Name.x = Game.width / 2 + 4;
@@ -56,7 +54,7 @@ function Scene_Quote(){
     var q4Sprite = MakeSprite("quote0004");
     q4.addChild(q4Sprite);
     
-    var q4Text = new PIXI.Text(textStrings["misatrributed"], {font:"33px Times", fill:"#FFFFFF", align:"center"});
+    var q4Text = new PIXI.Text(textStrings["misatrributed"], { fontFamily: "Times", fontSize: 33, fill: "#FFFFFF", align :"center" });
     q4Text.anchor.x = 0.5;
     q4Text.anchor.y = 0.5;
     q4Text.x = Game.width / 2 + 4;
@@ -98,9 +96,7 @@ function Scene_Quote(){
 				Tween_get(text).to({alpha:0}, _s(BEAT), Ease.quadInOut).call(function(){
 					Game.sceneManager.gotoScene("Game");
 				});
-
 			});
 		});
 	});
-
 }

@@ -3,16 +3,13 @@ Game.addToManifest({
 });
 
 /****
-
 FRAMES:
 00-00: happy still
 01-02: blink to greet murderer
 03-05: shock.
-
 ****/
 
-function HappyWeirdoPeep(scene){
-
+function HappyWeirdoPeep (scene) {
 	var self = this;
 	Peep.apply(self, [scene]);
     self._CLASS_ = "HappyWeirdoPeep";
@@ -30,24 +27,24 @@ function HappyWeirdoPeep(scene){
     var MODE = -1;
     MODE_SMILE = 1;
     MODE_FROWN = 2;
-    self.smile = function(){
+    self.smile = function () {
         MODE = MODE_SMILE;
     };
-    self.frown = function(){
+    self.frown = function () {
         MODE = MODE_FROWN;
     };
     var doubles = 0;
 
     // WANDERING
     self.wander = 0;
-    self.changeWander = function(){
+    self.changeWander = function () {
         self.wander = Math.random()*0.1-0.05;
     };
-    self.callbacks.update = function(){
+    self.callbacks.update = function () {
 
         // Wander around
         self.direction += self.wander;
-        if(Math.random()<0.05) self.changeWander();
+        if (Math.random()<0.05) self.changeWander();
 
         // STAY WITHIN GAME FRAME
         self.stayWithinRect({
@@ -58,19 +55,18 @@ function HappyWeirdoPeep(scene){
         doubles = (doubles+1)%4;
         var body = self.bodyMC;
         var frame = body.currentFrame;
-        if(doubles==0){
-            switch(MODE){
+        if (doubles==0) {
+            switch (MODE) {
                 case MODE_SMILE:
-                    if(frame<2) body.gotoAndStop(frame+1);
+                    if (frame<2) body.gotoAndStop(frame+1);
                     break;
                 case MODE_FROWN:
-                    if(frame<5) body.gotoAndStop(frame+1);
+                    if (frame<5) body.gotoAndStop(frame+1);
                     break;
             }
         }
-
     };
-    self.callbacks.startWalking = function(){
+    self.callbacks.startWalking = function () {
         self.speed = 2;
     };
     self.callbacks.startWalking();
@@ -79,11 +75,10 @@ function HappyWeirdoPeep(scene){
     self.hop = 0;
     self._lastHop = 0.99;
     self.direction = 1;
-    self.walkAnim = function(){
-
+    self.walkAnim = function () {
         // Hop & flip
         self.hop += self.speed/50;
-        if(self.hop>1) self.hop--;
+        if (self.hop>1) self.hop--;
         self.flip = (self.vel.x<0) ? -1 : 1;
 
         // Hop up & down
@@ -93,29 +88,25 @@ function HappyWeirdoPeep(scene){
 
         // Squash at the bottom of your cycle
         if(self._lastHop>0.9 && self.hop<=0.1) self.bounce=1.2;
-
     };
 
     // WOBBLE IN PLACE
-    self.standAnim = function(){
-
+    self.standAnim = function() {
         // Hop & flip
         self.hop += self.speed/150;
-        if(self.hop>1) self.hop--;
+        if (self.hop>1) self.hop--;
         self.flip = (self.vel.x<0) ? -1 : 1;
         
         // Wobble!
-        if(MODE!=MODE_FROWN){
+        if (MODE!=MODE_FROWN) {
             var t = self.hop*Math.TAU;
             g.rotation = Math.sin(t)*0.1;
             g.pivot.y = 0;
         }
-
     };
 
     // Prepare to get murdered
-    self.prepareForMurder = function(){
-
+    self.prepareForMurder = function () {
         // Wobble in place
         self.stopWalking();
         self.x = 540;
@@ -131,9 +122,6 @@ function HappyWeirdoPeep(scene){
             radius: 150
         };
         scene.avoidSpots.push(spot);
-
     };
-
-    // GET MURDERED
-
+    // GET MURDERED LMAO
 }
