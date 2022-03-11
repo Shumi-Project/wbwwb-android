@@ -103,7 +103,7 @@ function PanicPeep(scene) {
         scene.world.addProp(deadbody);    
 
         // MY GORE
-        for (var i=0;i<GORE_AMOUNT;i++) {
+        /*for (var i=0;i<GORE_AMOUNT;i++) {
             var gore = new Gore(scene);
             gore.init({
                 direction: -Math.TAU/4 - flip*Math.random()*0.5,
@@ -113,7 +113,7 @@ function PanicPeep(scene) {
                 z: (Math.random()*-30)
             });
             scene.world.addProp(gore);
-        }
+        }*/ // Disabled for a while due to lagging problem
 
         // KILL
         self.kill();

@@ -1,12 +1,13 @@
 package com.shumiproject.wbwwb;
 
 import android.app.Activity;
-import android.webkit.WebView;
-import android.webkit.WebSettings;
-import android.view.Display;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.webkit.WebView;
+import android.webkit.WebSettings;
 import android.view.WindowManager;
+import android.view.Display;
+import android.content.Context;
 
 public class MainActivity extends Activity {
 	
@@ -50,12 +51,12 @@ public class MainActivity extends Activity {
 	}
 
 	private int getScale(int i, int i2) {
-	    Display defaultDisplay = ((WindowManager) getSystemService("window")).getDefaultDisplay();
+	    Display defaultDisplay = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 	    defaultDisplay.getMetrics(displayMetrics);
 		int i3 = displayMetrics.heightPixels;
         int i4 = displayMetrics.widthPixels;
-		return (int) (Double.valueOf(Math.min(Double.valueOf(new Double((double) i3).doubleValue() / new Double((double) i2).doubleValue()).doubleValue(), Double.valueOf(new Double((double) i4).doubleValue() / new Double((double) i).doubleValue()).doubleValue())).doubleValue() * 100.0d);
+		return (int) (Double.valueOf(Math.min(Double.valueOf(Double.valueOf((double) i3).doubleValue() / Double.valueOf((double) i2).doubleValue()).doubleValue(), Double.valueOf(Double.valueOf((double) i4).doubleValue() / Double.valueOf((double) i).doubleValue()).doubleValue())).doubleValue() * 100.0d);
 	}
 	
 }

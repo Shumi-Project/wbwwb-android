@@ -175,7 +175,7 @@ function Stage_Panic(self){
     self.world.addProp(deadbody);    
 
     // Gore Particles
-    for(var i=0;i<30;i++){
+    /*for(var i=0;i<30;i++){
         var gore = new Gore(self);
         gore.init({
             direction: -(Math.TAU/4)+(Math.random()),
@@ -185,7 +185,7 @@ function Stage_Panic(self){
             z: (Math.random()*-30)
         });
         self.world.addProp(gore);
-    }
+    }*/ // Disabled for a while due to lagging problem
 
     // KILL
     happy.kill();
